@@ -27,17 +27,17 @@ void Scheme::compute_calculation_order() {
     for (const auto index : sort.result())
         sorted_blocks.push_back(blocks[index].get());
 
-    std::vector <Block*> can_t_untie_loop;
+    std::vector <Block*> explicit_blocks;
     for (const auto block : sorted_blocks) {
         block->init();
         if (!block->tryMakeConstant()) {
             active_sorted_blocks.push_back(block);
-            block->canUntieLoop() ? compute_sorted_blocks.push_back(block) : can_t_untie_loop.push_back(block);
+            block->isImplicitCompute() ? compute_sorted_blocks.push_back(block) : explicit_blocks.push_back(block);
         }
     }
 
-    std::ranges::reverse(compute_sorted_blocks); // обратный порядок блоков
-    compute_sorted_blocks.insert(compute_sorted_blocks.end(), can_t_untie_loop.begin(), can_t_untie_loop.end());
+    std::ranges::reverse(compute_sorted_blocks); // обратный порядок блоков для неявного вычисления
+    compute_sorted_blocks.insert(compute_sorted_blocks.end(), explicit_blocks.begin(), explicit_blocks.end());
 }
 
 void Scheme::init_indices() {
