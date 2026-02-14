@@ -28,7 +28,8 @@ public:
         ports = new Ports<Type>(1, 1);
         register_ports(ports);
 
-        toggleFlag(Block::FlagType::CAN_UNTIE_LOOP);
+        toggleFlag(CAN_UNTIE_LOOP);
+        toggleFlag(IMPLICIT_COMPUTE);
     }
 
     void init() const override {
