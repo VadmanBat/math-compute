@@ -29,7 +29,8 @@ protected:
 
     enum FlagType {
         CONSTANT = 1 << 0,
-        CAN_UNTIE_LOOP = 1 << 1
+        CAN_UNTIE_LOOP = 1 << 1,
+        IMPLICIT_COMPUTE = 1 << 2,
     };
 
     void register_ports(PortsBase* base);
@@ -52,10 +53,11 @@ public:
     }
 
     // Поддержка флагов:
-    void toggleFlag(int flag) { flags ^= flag; };
+    void toggleFlag(const int flag) { flags ^= flag; };
 
     bool isConstant() const { return flags & CONSTANT; }
     bool canUntieLoop() const { return flags & CAN_UNTIE_LOOP; }
+    bool isImplicitCompute() const { return flags & IMPLICIT_COMPUTE; }
 
     virtual bool tryMakeConstant() { return false; }
 
