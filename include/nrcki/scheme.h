@@ -41,7 +41,7 @@ class Scheme final : public Context {
     std::vector<std::unique_ptr<Block>> blocks;
     std::unordered_map<string, Type> parameters;
 
-    std::unordered_map<size, std::vector<size>> reverse_graph;
+    std::unordered_map<size, std::vector<size>> direct_graph;
     std::vector<Block*> sorted_blocks, active_sorted_blocks, compute_sorted_blocks;
 
     void init_indices();
