@@ -1,4 +1,4 @@
-#include "../../../include/nrcki/scheme.h"
+#include "nrcki/scheme.h"
 
 #include "blocks/dynamic/integrator.hpp"
 #include "blocks/dynamic/inertial.hpp"

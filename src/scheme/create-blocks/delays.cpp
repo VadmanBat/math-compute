@@ -1,4 +1,4 @@
-#include "../../../include/nrcki/scheme.h"
+#include "nrcki/scheme.h"
 
 #include "blocks/delays/delay-on.hpp"
 #include "blocks/delays/delay-off.hpp"

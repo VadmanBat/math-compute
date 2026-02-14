@@ -1,4 +1,4 @@
-#include "../../../include/nrcki/scheme.h"
+#include "nrcki/scheme.h"
 
 #include "blocks/sources/constant.hpp"
 #include "blocks/sources/step.hpp"

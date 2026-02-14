@@ -1,4 +1,4 @@
-#include "../../../include/nrcki/scheme.h"
+#include "nrcki/scheme.h"
 
 #include "blocks/triggers/rs-trigger.hpp"
 #include "blocks/triggers/sr-trigger.hpp"

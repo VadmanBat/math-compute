@@ -2,25 +2,31 @@
 // Created by Vadim on 06.05.2025.
 //
 
-#include "../../include/nrcki/scheme.h"
-
+#include "nrcki/scheme.h"
 #include "ports.hpp"
+
+#include <algo/kahn.hpp>
 
 #include <algorithm>
 #include <set>
-#include <iomanip>
-
-#include "../../code/algorithms/graphs.hpp"
 
 namespace nrcki {
 void Scheme::compute_calculation_order() {
-    Graph graph(reverse_graph);
-    auto order = graph.result();
-
-    for (const auto index : order)
-        sorted_blocks.push_back(blocks[index].get());
+    std::vector<size> prioritized_breakers;
+    prioritized_breakers.reserve(blocks.size());
+    for (size i = 0; i < blocks.size(); ++i)
+        if (blocks[i]->canUntieLoop())
+            prioritized_breakers.push_back(i);
 
     time = 0;
+    sorted_blocks.clear();
+    active_sorted_blocks.clear();
+    compute_sorted_blocks.clear();
+
+    const algo::KahnTopologicalSort sort(direct_graph, prioritized_breakers);
+    for (const auto index : sort.result())
+        sorted_blocks.push_back(blocks[index].get());
+
     std::vector <Block*> can_t_untie_loop;
     for (const auto block : sorted_blocks) {
         block->init();
@@ -30,7 +36,7 @@ void Scheme::compute_calculation_order() {
         }
     }
 
-    std::reverse(compute_sorted_blocks.begin(), compute_sorted_blocks.end()); // обратный порядок блоков
+    std::ranges::reverse(compute_sorted_blocks); // обратный порядок блоков
     compute_sorted_blocks.insert(compute_sorted_blocks.end(), can_t_untie_loop.begin(), can_t_untie_loop.end());
 }
 

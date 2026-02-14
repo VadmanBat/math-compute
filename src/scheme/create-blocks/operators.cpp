@@ -1,4 +1,4 @@
-#include "../../../include/nrcki/scheme.h"
+#include "nrcki/scheme.h"
 
 #include "blocks/operators/summator.hpp"
 #include "blocks/operators/multiplier.hpp"

@@ -1,4 +1,4 @@
-#include "../../../include/nrcki/scheme.h"
+#include "nrcki/scheme.h"
 
 #include "blocks/nonlinear/saturation.hpp"
 #include "blocks/nonlinear/deadband.hpp"

@@ -1,4 +1,4 @@
-#include "../../../include/nrcki/scheme.h"
+#include "nrcki/scheme.h"
 
 #include "blocks/pulses/pulse.hpp"
 #include "blocks/pulses/rising-pulse.hpp"
