@@ -12,12 +12,13 @@ class ExtOutSignal final : public Block {
     using Type = types::real;
 
     Ports<Type>* ports;
+    Signals<Type>* signals;
 
 public:
     explicit ExtOutSignal(const Context& context) :
         Block(context) {
-        ports = new Ports<Type>(1, 1);
-        register_ports(ports);
+        register_ports(ports = new Ports<Type>(1, 1));
+        register_signals(signals = new Signals<Type>(0, 1));
     }
 
     void compute() const override {
