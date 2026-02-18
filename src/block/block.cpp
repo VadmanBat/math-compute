@@ -55,6 +55,15 @@ void Block::initIndices() {
     }
 }
 
+void Block::setInputPortAbsolute(const size index, void* port) const {
+    const auto [type_hash, i] = absolute_input_ports[index];
+    ports_bases.at(type_hash)->setInputPort(i, port);
+}
+
+void Block::setInputPortRelative(const size type_hash, const size index, void* port) const {
+    ports_bases.at(type_hash)->setInputPort(index, port);
+}
+
 void* Block::getOutputPortAbsolute(const size index) const {
     return absolute_output_ports[index];
 }
@@ -63,13 +72,9 @@ void* Block::getOutputPortRelative(const size type_hash, const size index) const
     return ports_bases.at(type_hash)->getOutputPort(index);
 }
 
-void Block::setInputPortAbsolute(const size index, void* port) const {
+void* Block::getInputPortAbsolute(const size index) const {
     const auto [type_hash, i] = absolute_input_ports[index];
-    ports_bases.at(type_hash)->setInputPort(i, port);
-}
-
-void Block::setInputPortRelative(const size type_hash, const size index, void* port) const {
-    ports_bases.at(type_hash)->setInputPort(index, port);
+    return ports_bases.at(type_hash)->getInputPort(i);
 }
 
 const std::vector <void*>& Block::getOutputPortsAbsolute() const {
