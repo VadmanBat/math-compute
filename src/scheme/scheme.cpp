@@ -27,7 +27,7 @@ void Scheme::compute_calculation_order() {
     for (const auto index : sort.result())
         sorted_blocks.push_back(blocks[index].get());
 
-    std::vector <Block*> explicit_blocks;
+    std::vector<Block*> explicit_blocks;
     for (const auto block : sorted_blocks) {
         block->init();
         if (!block->tryMakeConstant()) {
@@ -49,12 +49,12 @@ void Scheme::init_indices() {
     absolute_output_index.clear();
     relative_output_index.clear();
 
-    std::set <size> sorted_type_hashes;
+    std::set<size> sorted_type_hashes;
     for (auto& [type_hash, bytes] : port_memory) {
-        const size count = total_outputs[type_hash];
-        const size type_size = types::type_size(type_hash);
+        const size count             = total_outputs[type_hash];
+        const size type_size         = types::type_size(type_hash);
         auto& relative_output_points = relative_output_index[type_hash];
-        byte* data = bytes.data();
+        byte* data                   = bytes.data();
         for (size i = 0; i < count; ++i) {
             relative_output_points.emplace_back(data + i * type_size);
             ports_info[data + i * type_size].relative_index = relative_output_points.size() - 1;
@@ -64,10 +64,10 @@ void Scheme::init_indices() {
 
     for (size i = 0; i < blocks_count; ++i) {
         int abs_input_index = -1;
-        auto inputs = blocks[i]->inputs();
-        auto outputs = blocks[i]->outputs();
+        auto inputs         = blocks[i]->inputs();
+        auto outputs        = blocks[i]->outputs();
         for (const auto& type_hash : sorted_type_hashes) {
-            const auto input_count = inputs[type_hash];
+            const auto input_count      = inputs[type_hash];
             auto& relative_input_points = relative_input_index[type_hash];
             for (size j = 0; j < input_count; ++j) {
                 absolute_input_index.emplace_back(i, ++abs_input_index);
@@ -90,21 +90,22 @@ void Scheme::allocate_memory() {
     for (const auto& [type_hash, count] : total_outputs)
         port_memory[type_hash].resize(count * types::type_size(type_hash));
 
-    std::unordered_map <size, size> offsets;
-    for (auto& block : blocks) {
-        std::unordered_map <size, void*> block_memory;
+    std::unordered_map<size, size> offsets;
+    for (const auto& block : blocks) {
+        std::unordered_map<size, void*> block_memory;
         for (const auto& [type_hash, count] : block->outputs()) {
             block_memory[type_hash] = port_memory[type_hash].data() + offsets[type_hash];
-            offsets[type_hash] += count * types::type_size(type_hash);
+            offsets[type_hash]      += count * types::type_size(type_hash);
         }
 
         block->outputs(block_memory);
     }
 
+    build_signals();
     init_indices();
 }
 
-void Scheme::compute(uint64_t steps) {
+void Scheme::compute(const uint64_t steps) {
     for (size i = 0; i < steps; ++i) {
         time += dt;
         for (const auto block : compute_sorted_blocks)
@@ -113,7 +114,7 @@ void Scheme::compute(uint64_t steps) {
     dt_count += steps;
 }
 
-void Scheme::computeSync(uint64_t steps) {
+void Scheme::computeSync(const uint64_t steps) {
     Time += steps * sync_step;
     while (time < Time) {
         time += dt;
@@ -123,7 +124,7 @@ void Scheme::computeSync(uint64_t steps) {
     }
 }
 
-std::vector <uint8_t> Scheme::getDoubles() {
+std::vector<uint8_t> Scheme::getDoubles() {
     return port_memory[types::type_hash<double>()];
 }
 }

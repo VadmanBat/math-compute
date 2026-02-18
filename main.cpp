@@ -3,17 +3,28 @@
 int main() {
     nrcki::types::register_all_types();
 
-    constexpr nrcki::types::link n = 4;
+    /*constexpr nrcki::types::link n = 4;
     const nrcki::types::link absolute_links[2 * n] = { 0, 0, 1, 2, 2, 1, 2, 3 };
 
     double coeffs[2] = {1, -1};
-    double c1[1] = {1};
+    double c1[2] = {1};
 
     nrcki::Scheme scheme;
     scheme.addConstant();
     scheme.addSummator(2, coeffs);
     scheme.addOscillatory();
-    scheme.addSummator(1, c1);
+    //scheme.addSummator(1, c1);
+    scheme.setAbsoluteLinks(n-1, absolute_links);*/
+
+    constexpr nrcki::types::link n = 4;
+    const nrcki::types::link absolute_links[2 * n] = { 0, 0, 1, 1, 2, 2, 3, 3 };
+
+    nrcki::Scheme scheme;
+    scheme.addLinearSource();
+    scheme.addStepDelay();
+    scheme.addStepDelay();
+    scheme.addStepDelay();
+    scheme.addStepDelay();
     scheme.setAbsoluteLinks(n, absolute_links);
 
     scheme.printOutputPorts<double>();
@@ -31,16 +42,11 @@ int main() {
  *
  * Вопросы:
  *  - работа блока "временное подтверждение";
+ *  - инициализация и реализация debounce (необходимо утвердить);
  *
  * Текущие задачи:
- *  - вынести алгоритмы в библиотеку algo;
  *  - добавить внешних сигналов;
- *
- *  - обратные связи для динамических блоков (добавить классификацию, что блок может развязать петлю);
- *  - порядок инициализации при обратных связях (вынести при инициализации вперёд блоки, что могут развязать петлю);
- *  - при решении графа добавить резервные стоки в виде списка блоков, которые развязывают петли;
- *
- *  - инициализация и реализация debounce (необходимо утвердить);
+ *  - добавить заморозку связи;
  *
  *  - builder (загрузка сигналов, параллельный расчёт, компиляция);
  *  - solver (разработка)
@@ -51,7 +57,7 @@ int main() {
  *
  *  - вынести логику выделения памяти в родительский класс схемы;
  *
- *  - производные Ньютона для блоков;
+ *  - блоки на добавление: производные по формулам Ньютона (нет шума), по МНК (шум), ОГР;
  *  - поддержка инициализации сложных типов портов в схеме;
  *  - перенести логику кодогенерации в отдельные cpp-файлы;
  *

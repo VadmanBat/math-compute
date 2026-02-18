@@ -15,8 +15,9 @@ target_include_directories(scheme PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
-add_library(${PROJECT_NAME}::scheme ALIAS scheme)
+target_link_libraries(scheme PRIVATE algo)
 
+add_library(${PROJECT_NAME}::scheme ALIAS scheme)
 # ========== Настройки компиляции ==========
 #include(cmake/compiler-flags.cmake)
 
