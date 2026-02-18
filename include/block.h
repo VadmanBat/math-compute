@@ -2,6 +2,7 @@
 
 #include "constants/config.hxx"
 #include "context.hpp"
+#include "signals.h"
 
 #include <vector>
 #include <unordered_map>
@@ -33,7 +34,10 @@ protected:
         IMPLICIT_COMPUTE = 1 << 2,
     };
 
+    SignalsBase* signals = nullptr;
+
     void register_ports(PortsBase* base);
+    void register_signals(SignalsBase* s) { signals = s; }
 
 public:
     explicit Block(const Context& context) : context(context), id(++count) {
@@ -44,6 +48,8 @@ public:
     std::unordered_map<size, size> inputs() const;
     std::unordered_map<size, size> outputs() const;
     void outputs(std::unordered_map<size, void*> memory);
+    SignalsBase* getSignals() const { return signals; }
+
     void initIndices();
 
     // Виртуальный расчёт:
@@ -72,6 +78,10 @@ types::type_codename(PORTS->getTypeHash()) + \
 #define CODE_NAME_OUT(PORTS, INDEX) \
 types::type_codename(PORTS->getTypeHash()) + \
 '[' + std::to_string(context.ports_info.at(&PORTS->outputs[INDEX]).relative_index) + ']'
+#define CODE_NAME_SIGNAL_IN(SIGNALS, INDEX) (\
+"inputs[" + std::to_string((SIGNALS)->getInputOffset() + static_cast<size_t>(INDEX)) + ']')
+#define CODE_NAME_SIGNAL_OUT(SIGNALS, INDEX) (\
+"outputs[" + std::to_string((SIGNALS)->getOutputOffset() + static_cast<size_t>(INDEX)) + ']')
 #define CODE_NAME_TYPE(TYPE) \
 (types::type_name(types::type_hash<TYPE>()))
 #define CODE_NAME_INF(TYPE) \

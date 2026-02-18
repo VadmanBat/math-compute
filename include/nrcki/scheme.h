@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../constants/config.hxx"
-#include "../context.hpp"
+#include "constants/config.hxx"
+#include "context.hpp"
 
-#include "../block.h"
+#include "block.h"
 
 #include <vector>
 #include <memory>
@@ -19,13 +19,17 @@ class Scheme final : public Context {
     using link   = types::link;   // Тип для индексации связей
     using string = types::string; // Тип для строк
 
-    size dt_count     = 0; // Число шагов интегрирования
+    size dt_count     = 0;                      // Число шагов интегрирования
     types::time time  = 0, Time = 0, sync_step; // Абсолютное время
-    size blocks_count = 0; // Количество блоков
+    size blocks_count = 0;                      // Количество блоков
 
     /// Выделение памяти для портов:
     std::unordered_map<size, std::vector<byte>> port_memory; /// Байты выходных портов
     std::unordered_map<size, size> total_outputs;            /// Количество выходных портов: type_hash -> count
+
+    /// Выделение памяти для сигналов:
+    std::vector<double> input_buffer;  // весь внешний вход схемы (непрерывно)
+    std::vector<double> output_buffer; // весь внешний выход схемы
 
     /// Абсолютная и относительная индексация:
     std::vector<std::pair<size, void*>> absolute_output_index;          // index -> [type_hash, ptr]
@@ -43,6 +47,8 @@ class Scheme final : public Context {
 
     std::unordered_map<size, std::vector<size>> direct_graph;
     std::vector<Block*> sorted_blocks, active_sorted_blocks, compute_sorted_blocks;
+
+    void build_signals();
 
     void init_indices();
     void allocate_memory();
@@ -76,6 +82,7 @@ public:
     void setSteps(double sync, double delta_time) {
         sync_step = sync * Context::sec;
     }
+
     void assign(uint32_t count, const uint8_t* data);
 
     constexpr Type parameter(const string& name) const override {
@@ -195,5 +202,8 @@ public:
     }
 
     std::vector<uint8_t> getDoubles();
+
+    void setInputs(const double* values, size_t count);
+    void getOutputs(double* values) const;
 };
 }
