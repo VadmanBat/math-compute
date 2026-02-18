@@ -27,8 +27,9 @@ public:
         return input_count == 0;
     }
 
-    [[nodiscard]] virtual void* getOutputPort(size index) const = 0;
     virtual void setInputPort(size index, void* port) = 0;
+    [[nodiscard]] virtual void* getInputPort(size index) const = 0;
+    [[nodiscard]] virtual void* getOutputPort(size index) const = 0;
 };
 
 template <typename T>
@@ -56,12 +57,17 @@ public:
         return sizeof(T);
     }
 
+    void setInputPort(size index, void* port) override {
+        inputs[index] = static_cast<T*>(port);
+    }
+
+    [[nodiscard]] void* getInputPort(size index) const override {
+        return inputs[index];
+    }
+
     [[nodiscard]] void* getOutputPort(size index) const override {
         return outputs + index;
     }
 
-    void setInputPort(size index, void* port) override {
-        inputs[index] = static_cast<T*>(port);
-    }
 };
 }

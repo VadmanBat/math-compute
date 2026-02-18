@@ -79,9 +79,9 @@ types::type_codename(PORTS->getTypeHash()) + \
 types::type_codename(PORTS->getTypeHash()) + \
 '[' + std::to_string(context.ports_info.at(&PORTS->outputs[INDEX]).relative_index) + ']'
 #define CODE_NAME_SIGNAL_IN(SIGNALS, INDEX) (\
-"inputs[" + std::to_string((SIGNALS)->getInputOffset() + static_cast<size_t>(INDEX)) + ']')
+"input_signals[" + std::to_string((SIGNALS)->getInputOffset() + static_cast<size_t>(INDEX)) + ']')
 #define CODE_NAME_SIGNAL_OUT(SIGNALS, INDEX) (\
-"outputs[" + std::to_string((SIGNALS)->getOutputOffset() + static_cast<size_t>(INDEX)) + ']')
+"output_signals[" + std::to_string((SIGNALS)->getOutputOffset() + static_cast<size_t>(INDEX)) + ']')
 #define CODE_NAME_TYPE(TYPE) \
 (types::type_name(types::type_hash<TYPE>()))
 #define CODE_NAME_INF(TYPE) \
@@ -95,10 +95,12 @@ const auto var_ ## NAME = #NAME"_" + std::to_string(Block::id);
 #define CODE_NAME_SEC "sec"
 
     // Универсальные методы работы с портами:
-    [[maybe_unused]] virtual void* getOutputPortAbsolute(size index) const;
-    [[maybe_unused]] virtual void* getOutputPortRelative(size type_hash, size index) const;
     [[maybe_unused]] virtual void setInputPortAbsolute(size index, void* port) const;
     [[maybe_unused]] virtual void setInputPortRelative(size type_hash, size index, void* port) const;
+
+    [[maybe_unused]] virtual void* getInputPortAbsolute(size index) const;
+    [[maybe_unused]] virtual void* getOutputPortAbsolute(size index) const;
+    [[maybe_unused]] virtual void* getOutputPortRelative(size type_hash, size index) const;
 
     [[maybe_unused]] const std::vector<void*>& getOutputPortsAbsolute() const;
 };

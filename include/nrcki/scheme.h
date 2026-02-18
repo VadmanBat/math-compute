@@ -8,6 +8,7 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <map>
 #include <iostream>
 
 namespace nrcki {
@@ -47,6 +48,13 @@ class Scheme final : public Context {
 
     std::unordered_map<size, std::vector<size>> direct_graph;
     std::vector<Block*> sorted_blocks, active_sorted_blocks, compute_sorted_blocks;
+
+    struct FrozenPort {
+        void* original = nullptr;
+        double* value  = nullptr;
+    };
+
+    std::map<std::pair<size, size>, FrozenPort> frozen_ports;
 
     void build_signals();
 
@@ -205,5 +213,9 @@ public:
 
     void setInputs(const double* values, size_t count);
     void getOutputs(double* values) const;
+
+    void freezePort(size_t block_index, size_t abs_input_port, double value);
+    void unfreezePort(size_t block_index, size_t abs_input_port);
+    void unfreezeAllPorts();
 };
 }
