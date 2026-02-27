@@ -67,6 +67,7 @@
 #include "blocks/signals/ext-out-signal.hpp"
 #include "blocks/signals/int-in-signal.hpp"
 #include "blocks/signals/int-out-signal.hpp"
+#include "blocks/signals/plot.hpp"
 
 #include "blocks/sources/constant.hpp"
 #include "blocks/sources/step.hpp"
@@ -143,21 +144,25 @@ void Scheme::assign(uint32_t count, const uint8_t* data) {
                 }
                 break;
 
-            case BlockID::Integrator: read(k)
+            case BlockID::Integrator:
+                read(k)
                 read(y0)
                 blocks.push_back(std::make_unique<Integrator>(*this, k, y0));
                 break;
-            case BlockID::Inertial: read(k)
+            case BlockID::Inertial:
+                read(k)
                 read(T)
                 read(y0)
                 blocks.push_back(std::make_unique<Inertial>(*this, k, T, y0));
                 break;
-            case BlockID::InertialDifferential: read(k)
+            case BlockID::InertialDifferential:
+                read(k)
                 read(T)
                 read(y0)
                 blocks.push_back(std::make_unique<InertialDifferential>(*this, k, T, y0));
                 break;
-            case BlockID::Oscillatory: read(k)
+            case BlockID::Oscillatory:
+                read(k)
                 read(T)
                 read(b)
                 read(y0)
@@ -168,28 +173,32 @@ void Scheme::assign(uint32_t count, const uint8_t* data) {
                 blocks.push_back(std::make_unique<StepDelay>(*this, y0));
                 break;
 
-            case BlockID::PiecewiseLinear: read(n)
+            case BlockID::PiecewiseLinear:
+                read(n)
                 read_arr(x)
                 read_arr(y)
                 read(is_extra_bound)
                 blocks.push_back(std::make_unique<PiecewiseLinear>(*this, x, y, is_extra_bound));
                 break;
 
-            case BlockID::Or: read(n)
+            case BlockID::Or:
+                read(n)
                 read(bin_state_y0)
                 if (bin_state_y0)
                     blocks.push_back(std::make_unique<OrNot>(*this, n));
                 else
                     blocks.push_back(std::make_unique<Or>(*this, n));
                 break;
-            case BlockID::And: read(n)
+            case BlockID::And:
+                read(n)
                 read(bin_state_y0)
                 if (bin_state_y0)
                     blocks.push_back(std::make_unique<AndNot>(*this, n));
                 else
                     blocks.push_back(std::make_unique<And>(*this, n));
                 break;
-            case BlockID::Xor: read(n)
+            case BlockID::Xor:
+                read(n)
                 read(bin_state_y0)
                 if (bin_state_y0)
                     blocks.push_back(std::make_unique<XorNot>(*this, n));
@@ -218,18 +227,21 @@ void Scheme::assign(uint32_t count, const uint8_t* data) {
                 blocks.push_back(std::make_unique<GreaterOrEqual>(*this));
                 break;
 
-            case BlockID::Saturation: read(x1)
+            case BlockID::Saturation:
+                read(x1)
                 read(x2)
                 read(y1)
                 read(y2)
                 blocks.push_back(std::make_unique<Saturation>(*this, x1, x2, y1, y2));
                 break;
-            case BlockID::Deadband: read(x1)
+            case BlockID::Deadband:
+                read(x1)
                 read(x2)
                 read(k)
                 blocks.push_back(std::make_unique<Deadband>(*this, x1, x2, k));
                 break;
-            case BlockID::SaturationDeadband: read(x1)
+            case BlockID::SaturationDeadband:
+                read(x1)
                 read(x2)
                 read(y1)
                 read(y2)
@@ -263,11 +275,13 @@ void Scheme::assign(uint32_t count, const uint8_t* data) {
                 blocks.push_back(
                     std::make_unique<HysteresisDeadband>(*this, x1, x2, y1, y2, db_x1, db_x2, tern_state_y0));
                 break;
-            case BlockID::LowThreshold: read(x1)
+            case BlockID::LowThreshold:
+                read(x1)
                 read(x2)
                 blocks.push_back(std::make_unique<LowThreshold>(*this, x1, x2));
                 break;
-            case BlockID::HighThreshold: read(x1)
+            case BlockID::HighThreshold:
+                read(x1)
                 read(x2)
                 blocks.push_back(std::make_unique<HighThreshold>(*this, x1, x2));
                 break;
@@ -281,7 +295,8 @@ void Scheme::assign(uint32_t count, const uint8_t* data) {
                 blocks.push_back(std::make_unique<VariableHysteresisMinus>(*this));
                 break;
 
-            case BlockID::Summator: read(n)
+            case BlockID::Summator:
+                read(n)
                 read_arr(coeffs)
                 blocks.push_back(std::make_unique<Summator>(*this, coeffs));
                 break;
@@ -343,7 +358,6 @@ void Scheme::assign(uint32_t count, const uint8_t* data) {
 
             case BlockID::ExtInSignal: read(y0)
                 blocks.push_back(std::make_unique<ExtInSignal>(*this, y0));
-                //signals.push_back(blocks[i].get());
                 break;
             case BlockID::ExtOutSignal:
                 blocks.push_back(std::make_unique<ExtOutSignal>(*this));
@@ -354,6 +368,9 @@ void Scheme::assign(uint32_t count, const uint8_t* data) {
                 break;
             case BlockID::IntOutSignal:
                 blocks.push_back(std::make_unique<IntOutSignal>(*this));
+                break;
+            case BlockID::Plot: read(tern_state_y0)
+                blocks.push_back(std::make_unique<Plot>(*this, tern_state_y0));
                 break;
 
             case BlockID::Constant: read(y0)

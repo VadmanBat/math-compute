@@ -43,4 +43,8 @@ void Scheme::setInputs(const double* values, const size_t count) {
 void Scheme::getOutputs(double* values) const {
     std::ranges::copy(output_buffer, values);
 }
+
+size_t Scheme::getOutputCount() const {
+    return output_buffer.size();
+}
 }

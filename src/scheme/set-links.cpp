@@ -3,7 +3,7 @@
 namespace nrcki {
 #define SIZE 2
 /// [0: output_port, 1: input_port]
-[[maybe_unused]] void Scheme::setAbsoluteLinks(const int n, const link* links) {
+[[maybe_unused]] void Scheme::setAbsoluteLinks(const link n, const link* links) {
     allocate_memory();
     const auto last = links + SIZE * n;
     for (auto link = links; link != last; link += SIZE) {
@@ -20,7 +20,7 @@ namespace nrcki {
 
 #define SIZE 3
 /// [0: type_hash, 1: output_port, 2: input_port]
-[[maybe_unused]] void Scheme::setRelativeLinks(const int n, const link* links) {
+[[maybe_unused]] void Scheme::setRelativeLinks(const link n, const link* links) {
     allocate_memory();
 
     const auto last = links + SIZE * n;
@@ -39,7 +39,7 @@ namespace nrcki {
 
 #define SIZE 4
 /// [0: output_block, 1: output_port, 2: input_block, 3: input_port]
-[[maybe_unused]] void Scheme::setAbsoluteBlockLinks(const int n, const link* links) {
+[[maybe_unused]] void Scheme::setAbsoluteBlockLinks(const link n, const link* links) {
     allocate_memory();
 
     const auto last = links + SIZE * n;
@@ -55,7 +55,7 @@ namespace nrcki {
 
 #define SIZE 5
 /// [0: type_hash, 1: output_block, 2: output_port, 3: input_block, 4: input_port]
-[[maybe_unused]] void Scheme::setRelativeBlockLinks(const int n, const link* links) {
+[[maybe_unused]] void Scheme::setRelativeBlockLinks(const link n, const link* links) {
     allocate_memory();
 
     const auto last = links + SIZE * n;
