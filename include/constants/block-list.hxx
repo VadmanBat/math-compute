@@ -60,6 +60,7 @@ enum class BlockID : uint8_t {
     ExtOutSignal,
     IntInSignal,
     IntOutSignal,
+    Plot,
     // Sources (Источники)
     Constant,
     Step,

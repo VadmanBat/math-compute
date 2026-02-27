@@ -64,7 +64,7 @@ class Scheme final : public Context {
 
     // Абсолютная индексация
     template <typename T>
-    T* get_absolute_output_port(size index) const {
+    T* get_absolute_output_port(const size index) const {
         if (index >= absolute_output_index.size())
             return nullptr;
         const auto [hash, ptr] = absolute_output_index[index];
@@ -73,7 +73,7 @@ class Scheme final : public Context {
 
     // Относительная индексация
     template <typename T>
-    T* get_relative_output_port(size index) const {
+    T* get_relative_output_port(const size index) const {
         const auto hash = types::type_hash<T>();
         if (auto it = relative_output_index.find(hash); it != relative_output_index.end())
             if (index < total_outputs.at(hash))
@@ -87,7 +87,7 @@ public:
 
     ~Scheme() override = default;
 
-    void setSteps(double sync, double delta_time) {
+    void setSteps(const double sync, double delta_time) {
         sync_step = sync * Context::sec;
     }
 
@@ -175,10 +175,10 @@ public:
     void addRtsTrigger(char type = 'r', bool y0 = false);
 
     // Задание связей:
-    [[maybe_unused]] void setAbsoluteLinks(int n, const link* links);
-    [[maybe_unused]] void setRelativeLinks(int n, const link* links);
-    [[maybe_unused]] void setAbsoluteBlockLinks(int n, const link* links);
-    [[maybe_unused]] void setRelativeBlockLinks(int n, const link* links);
+    [[maybe_unused]] void setAbsoluteLinks(link n, const link* links);
+    [[maybe_unused]] void setRelativeLinks(link n, const link* links);
+    [[maybe_unused]] void setAbsoluteBlockLinks(link n, const link* links);
+    [[maybe_unused]] void setRelativeBlockLinks(link n, const link* links);
 
     void compute(uint64_t steps = 1);
     void computeSync(uint64_t steps = 1);
@@ -196,7 +196,7 @@ public:
     }
 
     template <typename T>
-    T getAbsoluteOutputPort(size index) const {
+    T getAbsoluteOutputPort(const size index) const {
         const auto [hash, ptr] = absolute_output_index[index];
         return *static_cast<T*>(ptr);
     }
@@ -213,6 +213,7 @@ public:
 
     void setInputs(const double* values, size_t count);
     void getOutputs(double* values) const;
+    size_t getOutputCount() const;
 
     void freezePort(size_t block_index, size_t abs_input_port, double value);
     void unfreezePort(size_t block_index, size_t abs_input_port);

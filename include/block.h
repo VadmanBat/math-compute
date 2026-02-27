@@ -61,6 +61,7 @@ public:
     // Поддержка флагов:
     void toggleFlag(const int flag) { flags ^= flag; };
 
+    bool hasFlag(const FlagType flag) const { return flags & flag; }
     bool isConstant() const { return flags & CONSTANT; }
     bool canUntieLoop() const { return flags & CAN_UNTIE_LOOP; }
     bool isImplicitCompute() const { return flags & IMPLICIT_COMPUTE; }
